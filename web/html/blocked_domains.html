@@ -17,14 +17,20 @@
           style="margin-bottom: 16px;"
         >
           <a-table-column title="#" :customRender="(_, __, i) => i + 1" width="50" />
-          <a-table-column title="[[ i18n('domain') ]]" dataIndex="domain" key="domain" />
-          <a-table-column title="[[ i18n('comment') ]]" dataIndex="comment" key="comment" />
+          <a-table-column :title="i18n('domain')"  dataIndex="domain"  key="domain" />
+          <a-table-column :title="i18n('comment')" dataIndex="comment" key="comment" />
           <a-table-column
             :title="i18n('action')"
             key="action"
-            :customRender="(_, record) => actionRender(record)"
+            :scopedSlots="{ customRender: 'action' }"
             width="120"
           />
+
+          <template slot="action" slot-scope="text, record">
+            <a @click="editDomainShow(record.id)">[[ i18n('edit') ]]</a>
+            |
+            <a @click="deleteDomain(record.id)">[[ i18n('delete') ]]</a>
+          </template>
         </a-table-sortable>
         <a-modal v-model="showAddModal" :title="i18n('add_domain')" @ok="addDomain">
           <a-form :model="addForm">
@@ -109,12 +115,6 @@
             });
           },
         });
-      },
-      actionRender(record) {
-        return (
-          `<a @click=\"editDomainShow(${record.id})\">${this.i18n('edit')}</a> | ` +
-          `<a @click=\"deleteDomain(${record.id})\">${this.i18n('delete')}</a>`
-        );
       },
       editDomainShow(id) {
         const d = this.domains.find(x => x.id === id);
