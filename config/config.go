@@ -55,18 +55,10 @@ func GetBinFolderPath() string {
 }
 
 func GetDBFolderPath() string {
-	// 1) explicit override via env
 	if path := os.Getenv("XUI_DB_FOLDER"); path != "" {
 		return path
 	}
-
-	// 2) per-user directory
-	if home, err := os.UserHomeDir(); err == nil {
-		return fmt.Sprintf("%s/.x-ui", home)
-	}
-
-	// 3) fallback to relative dir
-	return "./.x-ui"
+	return "/etc/x-ui"
 }
 
 func GetDBPath() string {
