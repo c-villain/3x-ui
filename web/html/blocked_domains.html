@@ -11,21 +11,12 @@
           [[ i18n('add') ]]
         </a-button>
         <a-table-sortable
+          :columns="columns"
           :data-source="domains"
           :row-key="'id'"
           :pagination="false"
           style="margin-bottom: 16px;"
         >
-          <a-table-column title="#" :customRender="(_, __, i) => i + 1" width="50" />
-          <a-table-column :title="i18n('domain')"  dataIndex="domain"  key="domain" />
-          <a-table-column :title="i18n('comment')" dataIndex="comment" key="comment" />
-          <a-table-column
-            :title="i18n('action')"
-            key="action"
-            :scopedSlots="{ customRender: 'action' }"
-            width="120"
-          />
-
           <template slot="action" slot-scope="text, record">
             <a @click="editDomainShow(record.id)">[[ i18n('edit') ]]</a>
             |
@@ -73,6 +64,16 @@
         addForm: { domain: '', comment: '' },
         editForm: { id: null, domain: '', comment: '' },
       };
+    },
+    computed: {
+      columns() {
+        return [
+          { title: '#', align: 'center', width: 50, customRender: (_, __, i) => i + 1 },
+          { title: this.i18n('domain'), dataIndex: 'domain', key: 'domain' },
+          { title: this.i18n('comment'), dataIndex: 'comment', key: 'comment' },
+          { title: this.i18n('action'), key: 'action', width: 120, scopedSlots: { customRender: 'action' } },
+        ];
+      },
     },
     methods: {
       i18n(key) {
